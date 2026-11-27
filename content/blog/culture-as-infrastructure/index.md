@@ -6,7 +6,7 @@ category: Culture
 tags: [culture, creative-economy, policy]
 author: tpa-editorial
 cover: ./cover.webp
-coverAlt: A creative professional in a pensive moment at work
+coverAlt: A curator discusses a large woven textile artwork with a visitor in a gallery
 ---
 
 When people talk about infrastructure, they usually mean roads, ports and power. But some of Africa's most powerful infrastructure is invisible: **the stories, sounds and styles** that shape how the continent is seen, and how it sees itself.

@@ -26,6 +26,17 @@ public/
 | `favicon.ico` | Favicon. |
 | `icon-192.png`, `icon-512.png`, `icon-512-maskable.png` | Web manifest icons: light logo on navy-950. `app/icon.png` (rounded, 512) and `app/apple-icon.png` (180) were made the same way. |
 
+## images/web/
+
+Section photography used by the page components. The build writes 640/1280/1920px WebP variants of each image (see `scripts/sync-cms-assets.mjs`). New AI-generated images follow `docs/ai-image-brief.md`.
+
+| File | Used in |
+|---|---|
+| `about-audience-individuals.webp` | About › Who we serve, "Individuals" panel (AI-generated, 926×1152) |
+| `about-audience-ventures.webp` | About › Who we serve, "Ventures" panel (AI-generated, 928×1152) |
+| `about-audience-organisations.webp` | About › Who we serve, "Organisations" panel (AI-generated, 928×1152) |
+| `about-primary.webp`, `about-secondary.webp`, `consultant-portrait-*.webp`, `faq.webp`, `home-hero*.webp`, `invitation-banner.webp`, `services-hero.webp`, `testimonials-banner.webp`, `avatar-*.webp` | Home and About sections. These are still reused across sections until the AI replacements land. |
+
 ## images/photography/
 
 | File | Was in v1 | Size | Used for in v1 |

@@ -6,7 +6,7 @@ category: Strategy
 tags: [strategy, execution, leadership]
 author: tpa-editorial
 cover: ./cover.webp
-coverAlt: A professional writing in a notebook at her desk
+coverAlt: A project lead moves sticky notes across a planning board as a colleague checks a tablet
 ---
 
 There is a familiar moment in many organisations: the strategy is approved, the slides are beautiful, and six months later very little has changed. The plan was not wrong. It was simply **never designed to be executed**.

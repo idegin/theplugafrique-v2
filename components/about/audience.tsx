@@ -7,9 +7,9 @@ import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
 
 const groups = [
-  { t: "Individuals", k: "seeking clarity", d: "Founders, leaders, professionals and creatives at a crossroads, looking for direction and the right connections.", img: "/images/web/consultant-portrait-focus.webp" },
-  { t: "Ventures", k: "ready to scale", d: "Startups and growing businesses that need strategy, investment readiness, partnerships or digital capability.", img: "/images/web/home-hero-alt.webp" },
-  { t: "Organisations", k: "aiming to transform", d: "Corporates, public institutions, development partners, NGOs and cultural bodies leading complex change.", img: "/images/web/about-primary.webp" },
+  { t: "Individuals", k: "seeking clarity", d: "Founders, leaders, professionals and creatives at a crossroads, looking for direction and the right connections.", img: "/images/web/about-audience-individuals.webp", alt: "A young professional with a notebook sits on a window ledge, looking out over the city" },
+  { t: "Ventures", k: "ready to scale", d: "Startups and growing businesses that need strategy, investment readiness, partnerships or digital capability.", img: "/images/web/about-audience-ventures.webp", alt: "A small startup team gathers around a laptop in a converted-warehouse office" },
+  { t: "Organisations", k: "aiming to transform", d: "Corporates, public institutions, development partners, NGOs and cultural bodies leading complex change.", img: "/images/web/about-audience-organisations.webp", alt: "A large leadership team meets around a long table in an institutional boardroom" },
 ];
 
 /** About · who we serve: expanding image panels on hover/focus (glossary: Image reveal on hover, Layout animation). */
@@ -44,7 +44,7 @@ export function Audience() {
                   )}
                   style={{ flexBasis: 0 }}
                 >
-                  <Image src={g.img} alt="" fill sizes="(min-width: 1024px) 50vw, 100vw" className={cn("-z-20 object-cover transition-transform duration-[1.2s] ease-out-expo", on ? "scale-100" : "scale-110")} />
+                  <Image src={g.img} alt={g.alt} fill sizes="(min-width: 1024px) 50vw, 100vw" className={cn("-z-20 object-cover transition-transform duration-[1.2s] ease-out-expo", on ? "scale-100" : "scale-110")} />
                   <div className={cn("absolute inset-0 -z-10 transition-colors duration-700", on ? "bg-linear-to-t from-navy-950/90 via-navy-950/30 to-transparent" : "bg-navy-950/65")} />
                   <div className="flex w-full min-w-0 flex-col justify-between p-7 lg:p-8">
                     <span className="font-mono text-sm text-accent">0{i + 1}</span>

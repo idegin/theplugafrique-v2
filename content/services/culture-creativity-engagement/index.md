@@ -5,7 +5,7 @@ icon: palette
 summary: Harness creativity and culture to strengthen identity, inspire communities and amplify impact.
 excerpt: We help clients harness the power of creativity and culture to strengthen identity, inspire communities, and amplify impact.
 cover: ./cover.webp
-coverAlt: A creative professional in thought during a collaborative session
+coverAlt: A designer pins textile swatches to a moodboard in a creative studio
 offerings:
   - Creative and Cultural Project Development
   - Brand Storytelling & Strategic Communication

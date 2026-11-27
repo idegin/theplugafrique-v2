@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
@@ -10,13 +10,38 @@ import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
 import { getLenis } from "@/components/providers/smooth-scroll";
 
+/** Height (px) at which the header samples the section beneath it. */
+const PROBE_Y = 36;
+
+/**
+ * Routes whose first section is a dark hero. Only the server-rendered first
+ * paint uses this, so the header doesn't flash light-on-dark before
+ * hydration; after that, `toneAt()` reads the real DOM.
+ */
+const startsDark = (pathname: string) => pathname === "/" || pathname.startsWith("/services");
+
+/**
+ * Geometric check for the [data-header="dark"] section under the header.
+ * This deliberately avoids hit-testing (elementsFromPoint): full-screen
+ * overlays such as the preloader and page-transition curtain sit on top
+ * during load and would hide the real section.
+ */
+function toneAt(): "dark" | "light" {
+  for (const el of document.querySelectorAll<HTMLElement>('[data-header="dark"]')) {
+    if (el.closest("[data-site-header]")) continue;
+    const r = el.getBoundingClientRect();
+    if (r.top <= PROBE_Y && r.bottom > PROBE_Y && r.height > 0) return "dark";
+  }
+  return "light";
+}
+
 /**
  * Smart header (glossary: Hide-on-scroll header, Shrinking header).
  * Reads the section beneath it ([data-header="dark"]) to pick its tone.
  */
 export function Header() {
   const pathname = usePathname();
-  const [tone, setTone] = useState<"dark" | "light">("light");
+  const [tone, setTone] = useState<"dark" | "light">(() => (startsDark(pathname) ? "dark" : "light"));
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
@@ -27,9 +52,13 @@ export function Header() {
     setScrolled(y > 40);
     if (!open) setHidden(y > 240 && y > lastY.current + 4 ? true : y < lastY.current - 4 ? false : (h) => h);
     lastY.current = y;
-    const probe = document.elementsFromPoint(window.innerWidth / 2, 36).find((el) => !el.closest("[data-site-header]"));
-    setTone(probe?.closest('[data-header="dark"]') ? "dark" : "light");
+    setTone(toneAt());
   }, [open]);
+
+  // Sync the tone before paint on mount and after every route change.
+  useLayoutEffect(() => {
+    setTone(toneAt());
+  }, [pathname]);
 
   useEffect(() => {
     let raf = 0;
@@ -38,12 +67,17 @@ export function Header() {
       raf = requestAnimationFrame(update);
     };
     update();
+    // Re-check once layout settles (fonts, images, scroll restoration).
+    const settle = window.setTimeout(onScroll, 250);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    window.addEventListener("load", onScroll);
     return () => {
       cancelAnimationFrame(raf);
+      window.clearTimeout(settle);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      window.removeEventListener("load", onScroll);
     };
   }, [update, pathname]);
 

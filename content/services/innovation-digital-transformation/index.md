@@ -5,7 +5,7 @@ icon: sparkles
 summary: Integrate strategy and technology to future-proof operations and build digital advantage.
 excerpt: We integrate strategy and technology to help clients future-proof their operations, enhance efficiency, and build digital advantage.
 cover: ./cover.webp
-coverAlt: A consultant interacting with a holographic map of Africa over a city skyline at night
+coverAlt: A consultant works on a laptop at dusk, a city skyline and faint data lines behind him
 offerings:
   - Digital Transformation Roadmaps
   - IT & Systems Consulting

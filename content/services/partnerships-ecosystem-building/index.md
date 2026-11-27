@@ -5,7 +5,7 @@ icon: network
 summary: Connect ideas, institutions and ecosystems to create collective value and collaborative impact.
 excerpt: We connect ideas, institutions, and ecosystems to create collective value and drive collaborative impact.
 cover: ./cover.webp
-coverAlt: Two colleagues reviewing a document together at a table
+coverAlt: Two executives shake hands across a meeting table as colleagues review documents
 offerings:
   - Program Design & Multi-stakeholder Coordination
   - Ecosystem Mapping & Facilitation

@@ -6,7 +6,7 @@ category: Innovation
 tags: [digital, transformation, change]
 author: tpa-editorial
 cover: ./cover.webp
-coverAlt: A consultant interacting with a holographic data map above a city at night
+coverAlt: A multi-generational team laughs together around a laptop in a glass-walled meeting room
 ---
 
 It is tempting to treat digital transformation as a procurement exercise: choose the platform, sign the contract, schedule the go-live. But the organisations that see real returns know that **technology is the easy part**.

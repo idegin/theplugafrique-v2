@@ -5,7 +5,7 @@ icon: compass
 summary: Clarify direction, design actionable strategy, and execute with precision.
 excerpt: We help organisations and ventures clarify their direction, design actionable strategies, and execute with precision.
 cover: ./cover.webp
-coverAlt: Two consultants walking and talking through a strategy brief
+coverAlt: A senior consultant points to a strategy map on a glass wall while a client listens
 offerings:
   - Corporate and Institutional Strategy
   - Policy and Public Sector Advisory

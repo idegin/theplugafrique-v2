@@ -5,7 +5,7 @@ icon: graduation-cap
 summary: Programmes that empower teams, leaders and organisations to perform at their best.
 excerpt: We design and deliver programmes that empower teams, leaders, and organisations to perform at their best.
 cover: ./cover.webp
-coverAlt: A professional taking notes at her desk beside a laptop
+coverAlt: A facilitator guides three young professionals through a workshop exercise
 offerings:
   - Capacity Building & Learning Design
   - Executive Training & Team Development

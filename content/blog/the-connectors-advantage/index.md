@@ -6,7 +6,7 @@ category: Partnerships
 tags: [ecosystems, partnerships, growth]
 author: tpa-editorial
 cover: ./cover.webp
-coverAlt: Two professionals walking together through a modern office lobby
+coverAlt: Professionals are introduced to one another in a busy, light-filled office atrium
 featured: true
 ---
 
