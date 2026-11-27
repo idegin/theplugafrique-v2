@@ -6,6 +6,7 @@ import { SplitHeading } from "@/components/motion/split-heading";
 import { Reveal } from "@/components/motion/reveal";
 import { FloatGraphic } from "@/components/motion/float-graphic";
 import { cn } from "@/lib/utils";
+import { asset } from "@/lib/base-path";
 
 const steps = [
   {
@@ -139,7 +140,7 @@ export function Philosophy() {
                   <span
                     aria-hidden
                     className="block size-14 bg-gold-300 [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] lg:size-16"
-                    style={{ maskImage: `url(${s.icon})`, WebkitMaskImage: `url(${s.icon})` }}
+                    style={{ maskImage: `url(${asset(s.icon)})`, WebkitMaskImage: `url(${asset(s.icon)})` }}
                   />
                   <span className="font-mono text-sm text-fg-subtle lg:hidden">0{i + 1}</span>
                 </div>

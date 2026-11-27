@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { gsap, registerGsap, ScrollTrigger } from "@/lib/motion";
 import { getLenis } from "./smooth-scroll";
+import { stripBasePath } from "@/lib/base-path";
 
 /**
  * Curtain page transition (glossary: Curtain / Overlay transition, Wipe).
@@ -38,7 +39,7 @@ export function PageTransition() {
         .timeline()
         .fromTo(el, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.65, ease: "power4.inOut" })
         .fromTo(el.querySelector("[data-line]"), { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, "-=0.25")
-        .add(() => router.push(url.pathname + url.search + url.hash));
+        .add(() => router.push(stripBasePath(url.pathname) + url.search + url.hash));
     };
     // Capture phase: run before Next <Link>, which would otherwise navigate first
     document.addEventListener("click", onClick, true);

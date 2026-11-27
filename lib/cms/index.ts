@@ -15,6 +15,7 @@ import {
   testimonialSchema,
 } from "./schema";
 import { renderMarkdown, type TocItem } from "./markdown";
+import { asset } from "../base-path";
 
 /* ==========================================================================
    File-based CMS
@@ -118,7 +119,7 @@ export async function getService(slug: string) {
   const entry = readCollection("services").find((e) => e.slug === slug);
   const service = getServices().find((s) => s.slug === slug);
   if (!entry || !service) return null;
-  const { html, toc } = await renderMarkdown(service.body, (src) => assetUrl(entry, src));
+  const { html, toc } = await renderMarkdown(service.body, (src) => asset(assetUrl(entry, src)));
   return { ...service, html, toc };
 }
 
@@ -179,7 +180,7 @@ export async function getPost(slug: string): Promise<PostWithHtml | null> {
   const entry = readCollection("blog").find((e) => e.slug === slug);
   const post = getPosts().find((p) => p.slug === slug);
   if (!entry || !post) return null;
-  const { html, toc } = await renderMarkdown(post.body, (src) => assetUrl(entry, src));
+  const { html, toc } = await renderMarkdown(post.body, (src) => asset(assetUrl(entry, src)));
   return { ...post, html, toc };
 }
 

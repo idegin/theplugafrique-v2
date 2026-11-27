@@ -2,6 +2,7 @@ import { Tilt } from "@/components/motion/tilt";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { cn } from "@/lib/utils";
+import { asset } from "@/lib/base-path";
 
 const items = [
   { t: "Clarity", icon: "/icons/philosophy/clarity.svg", d: "Defining purpose, priorities and pathways to success.", tone: "light" },
@@ -39,7 +40,7 @@ export function Principles() {
                   <span
                     aria-hidden
                     className={cn("block size-16 [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]", it.tone === "gold" ? "bg-navy-950" : it.tone === "light" ? "bg-gold-500" : "bg-accent-fill")}
-                    style={{ maskImage: `url(${it.icon})`, WebkitMaskImage: `url(${it.icon})` }}
+                    style={{ maskImage: `url(${asset(it.icon)})`, WebkitMaskImage: `url(${asset(it.icon)})` }}
                   />
                   <span className={cn("font-mono text-sm", it.tone === "gold" ? "text-navy-900/70" : "text-fg-subtle")}>0{i + 1}</span>
                 </div>

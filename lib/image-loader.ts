@@ -5,10 +5,16 @@
    Anything else (logos, icons, SVG, remote URLs) is served as-is. */
 
 // Keep in sync with WIDTHS in scripts/sync-cms-assets.mjs.
+import { asset } from "./base-path";
+
 const WIDTHS = [640, 1280, 1920];
 const RASTER = /\.(jpe?g|png|webp|avif)$/i;
 
-export default function imageLoader({ src, width }: { src: string; width: number; quality?: number }) {
+export default function imageLoader(opts: { src: string; width: number; quality?: number }) {
+  return asset(resolve(opts));
+}
+
+function resolve({ src, width }: { src: string; width: number; quality?: number }) {
   if (!RASTER.test(src) || /^(https?:)?\/\//.test(src)) return src;
   let base: string | null = null;
   if (src.startsWith("/cms/") && !src.startsWith("/cms/_static/")) base = src;

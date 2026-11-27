@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { asset } from "@/lib/base-path";
 import { getClients } from "@/lib/cms";
 import { Marquee } from "@/components/motion/marquee";
 
@@ -13,7 +14,7 @@ export function ClientMarquee() {
           {clients.map((c) => {
             const logo = (
               <Image
-                src={c.logo}
+                src={asset(c.logo)}
                 alt={c.name}
                 width={300}
                 height={100}
