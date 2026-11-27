@@ -12,7 +12,8 @@ This repo is v2 of the marketing website for **The Plug Afrique**. The goal is a
   - **`docs/brand.md`** is the brand book: narrative, philosophy, the five service areas, voice, contact details and offices. Use it as the source of truth for copy.
   - **`docs/assets.md`** is the manifest for everything in `public/` (`brand/`, `images/{photography,backgrounds,clients,theme-placeholders}/`, `icons/{social,contact,ui,philosophy,features,decorative}/`, `fonts/font-awesome/`). Keep it updated when adding assets.
   - `images/theme-placeholders/` holds stock images from v1's template (including the "Budgeto" logo). They are not brand assets.
-- **Static export is required.** The site must build to `out/` (`output: "export"`, `trailingSlash: true` and `images.unoptimized` in `next.config.ts`). That means no server runtime: no API routes, no server actions, no ISR, and no on-demand `next/image` optimization (use `images.unoptimized` or a build-time approach). Dynamic routes need `generateStaticParams`.
+- **Static export is required.** The site must build to `out/` (`output: "export"` and `trailingSlash: true` in `next.config.ts`). That means no server runtime: no API routes, no server actions, no ISR, and no on-demand `next/image` optimization. Dynamic routes need `generateStaticParams`.
+- **Images:** `next/image` uses a custom loader (`lib/image-loader.ts`). `scripts/sync-cms-assets.mjs` pre-renders `<name>-{640,1280,1920}.webp` variants for every raster image in `content/` and `public/images/web/`, and the loader maps srcset widths onto them. Other paths (logos, icons) get no variants, so pass `unoptimized` on those `<Image>`s. If you change the widths, change the script, the loader and `images.deviceSizes` together. The script also warns about covers under 1600px wide or in portrait.
 - **File-based CMS lives in this repo.** Services, blog posts, and similar collections are authored as Markdown (frontmatter + body) with thumbnail/cover image files alongside, and read at build time. Nothing comes from an external CMS.
 
 ## CMS (`content/` + `lib/cms/`)
@@ -49,3 +50,12 @@ npm is the package manager (`package-lock.json`). Earlier commits used a pnpm/tu
 - **Motion primitives** live in `components/motion/`: `Reveal` (mark children with `data-reveal`, or pass `self`), `SplitHeading`, `ClipReveal`, `Parallax`, `DrawLine`, `Counter`, `ScrubText`, `StackCards`, `HorizontalScroll` (mark items with `data-hitem`), `VelocityMarquee`, `Marquee`, `Tilt`, `Spotlight`, `Magnetic`, `Scramble`, `WordRotator`, `FloatGraphic`, `AfricaMap`. Each section should pick a different combination. Elements hidden before their reveal (`data-reveal`, `data-split`, `data-clip`) are only hidden when JS runs and motion is allowed, so they always need a component that reveals them.
 - **Page sections** are grouped by page: `components/home`, `components/about`, `components/services`, `components/blog`, plus shared site pieces in `components/site`. `lib/geo.ts` holds the Africa outline used by the 3D hero and the SVG map.
 - **`lib/site.ts`** holds site constants (contact, offices, socials, nav, CTA).
+
+## SEO
+
+- Every page builds its metadata with `pageMeta()` from `lib/seo.ts` (title, description, canonical, full Open Graph and Twitter set). Don't hand-write `openGraph` on a page: Next replaces the parent object, so partial blocks drop tags.
+- Share images are 1200×630 PNGs rendered at build time by `app/og/[card]/route.tsx` to `out/og/<name>.png`, using fonts in `assets/og/`. The list lives in `lib/og-cards.ts` (static pages plus one per service and post). A new page needs a card there and `og: "<name>"` in its `pageMeta()` call. The `opengraph-image.tsx` file convention isn't used because static export writes those files without an extension.
+- JSON-LD builders live in `lib/seo.ts` and render through `components/site/json-ld.tsx`: `Organization` in the layout, `WebSite` and `FAQPage` on home (`<Faq structuredData />`), `Service` and `BreadcrumbList` on service pages, `BlogPosting` and `BreadcrumbList` on posts.
+- Icons are `app/favicon.ico`, `app/icon.png` and `app/apple-icon.png`; `app/manifest.ts` points at `public/brand/icon-*.png`.
+- Set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and `NEXT_PUBLIC_BING_SITE_VERIFICATION` at build time for Search Console and Bing.
+- `public/_redirects` and `public/_headers` (Netlify / Cloudflare Pages format) hold the v1 → v2 301s, security headers and cache rules. Mirror them in `vercel.json` if the site is hosted on Vercel.

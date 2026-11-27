@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { articleLd, breadcrumbLd, pageMeta } from "@/lib/seo";
+import { JsonLd } from "@/components/site/json-ld";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -26,18 +28,20 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  return {
+  return pageMeta({
     title: post.title,
     description: post.excerpt,
-    alternates: { canonical: post.href },
-    openGraph: {
-      type: "article",
-      title: post.title,
-      description: post.excerpt,
-      publishedTime: post.date.toISOString(),
-      images: [{ url: post.cover.src, width: post.cover.width, height: post.cover.height, alt: post.cover.alt }],
+    path: post.href,
+    type: "article",
+    og: `blog-${post.slug}`,
+    article: {
+      publishedTime: post.date,
+      modifiedTime: post.updated,
+      authors: [post.author.name],
+      tags: post.tags,
+      section: post.category,
     },
-  };
+  });
 }
 
 export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
@@ -48,21 +52,16 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const all = getPosts();
   const nextPost = all[(all.findIndex((p) => p.slug === post.slug) + 1) % all.length];
   const url = new URL(post.href, site.url).toString();
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.excerpt,
-    datePublished: post.date.toISOString(),
-    image: new URL(post.cover.src, site.url).toString(),
-    author: { "@type": "Organization", name: post.author.name },
-    publisher: { "@type": "Organization", name: site.name },
-  };
 
   return (
     <main id="main" tabIndex={-1} className="outline-none">
       <ReadingProgress target="[data-article]" />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd
+        data={[
+          articleLd(post),
+          breadcrumbLd([{ name: "Insights", path: "/blog/" }, { name: post.title, path: post.href }]),
+        ]}
+      />
       <article data-article="">
         <header className="bg-canvas pt-[calc(var(--spacing-header)+3rem)]">
           <div className="container-page">

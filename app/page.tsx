@@ -9,11 +9,18 @@ import { Testimonials } from "@/components/home/testimonials";
 import { Insights } from "@/components/home/insights";
 import { Faq } from "@/components/home/faq";
 import { Invitation } from "@/components/home/invitation";
+import type { Metadata } from "next";
+import { site } from "@/lib/site";
+import { pageMeta, websiteLd } from "@/lib/seo";
+import { JsonLd } from "@/components/site/json-ld";
+
+export const metadata: Metadata = pageMeta({ description: site.description, path: "/", og: "home" });
 
 export default function Home() {
   return (
     <>
       <main id="main" tabIndex={-1} className="outline-none">
+        <JsonLd data={websiteLd()} />
         <Hero />
         <ClientMarquee />
         <Essence />
@@ -23,7 +30,7 @@ export default function Home() {
         <WhyUs />
         <Testimonials />
         <Insights />
-        <Faq />
+        <Faq structuredData />
         <Invitation />
       </main>
     </>

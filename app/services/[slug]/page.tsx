@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { breadcrumbLd, pageMeta, serviceLd } from "@/lib/seo";
+import { JsonLd } from "@/components/site/json-ld";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -24,12 +26,7 @@ export async function generateMetadata({ params }: PageProps<"/services/[slug]">
   const { slug } = await params;
   const s = await getService(slug);
   if (!s) return {};
-  return {
-    title: s.title,
-    description: s.excerpt,
-    alternates: { canonical: s.href },
-    openGraph: { images: [{ url: s.cover.src, width: s.cover.width, height: s.cover.height, alt: s.cover.alt }] },
-  };
+  return pageMeta({ title: s.title, description: s.excerpt, path: s.href, og: `service-${s.slug}` });
 }
 
 export default async function ServicePage({ params }: PageProps<"/services/[slug]">) {
@@ -42,6 +39,12 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
   return (
     <main id="main" tabIndex={-1} className="outline-none">
+      <JsonLd
+        data={[
+          serviceLd(service),
+          breadcrumbLd([{ name: "Services", path: "/services/" }, { name: service.title, path: service.href }]),
+        ]}
+      />
       <section data-header="dark" className="on-dark bg-aurora-navy bg-grain relative overflow-hidden pb-section-sm pt-[calc(var(--spacing-header)+3rem)]">
         <div className="container-page relative z-10 grid gap-12 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">

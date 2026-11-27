@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getServices } from "@/lib/cms";
 import { ServicesHero } from "@/components/services/services-hero";
 import { PracticeGallery } from "@/components/services/practice-gallery";
@@ -9,11 +10,12 @@ import { HoverList } from "@/components/home/hover-list";
 import { Reveal } from "@/components/motion/reveal";
 import { Invitation } from "@/components/home/invitation";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Services",
   description: "Strategy, innovation, capability, culture and partnerships: five connected practices from The Plug Afrique.",
-  alternates: { canonical: "/services/" },
-};
+  path: "/services/",
+  og: "services",
+});
 
 export default function ServicesPage() {
   const services = getServices();

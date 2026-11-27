@@ -5,7 +5,9 @@ All static assets live in `public/` and are served from the site root (`public/b
 ```
 public/
 ├── favicon.ico                    # root favicon (also app/favicon.ico)
-├── brand/                         # The Plug Afrique identity
+├── _redirects  _headers           # host config (Netlify / Cloudflare Pages)
+├── brand/                         # The Plug Afrique identity (+ icon-*.png for the web manifest)
+├── cms/                           # GENERATED, gitignored: content/ assets + WebP variants
 ├── images/
 │   ├── photography/               # on-brand imagery used by v1 pages
 │   ├── backgrounds/               # abstract backgrounds
@@ -22,6 +24,7 @@ public/
 |---|---|
 | `tpa-logo.png` | Primary "tpa / THE PLUG AFRIQUE" logo, navy on transparent, 359×202. Use `filter: invert(1)` (or a white variant) on dark backgrounds. A vector (SVG) version would be worth requesting from the client. |
 | `favicon.ico` | Favicon. |
+| `icon-192.png`, `icon-512.png`, `icon-512-maskable.png` | Web manifest icons: light logo on navy-950. `app/icon.png` (rounded, 512) and `app/apple-icon.png` (180) were made the same way. |
 
 ## images/photography/
 

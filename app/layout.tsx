@@ -8,6 +8,8 @@ import { Cursor } from "@/components/site/cursor";
 import { BackToTop } from "@/components/site/back-to-top";
 import { PageTransition } from "@/components/providers/page-transition";
 import { site } from "@/lib/site";
+import { organizationLd, pageMeta } from "@/lib/seo";
+import { JsonLd } from "@/components/site/json-ld";
 import "./globals.css";
 
 // Display serif: variable with optical size + SOFT/WONK axes (see DESIGN.md §3)
@@ -36,20 +38,28 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const rootShare = pageMeta({ description: site.description, path: "/", og: "home" });
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s · ${site.name}` },
   description: site.description,
   applicationName: site.name,
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title: site.title,
-    description: site.description,
-    url: site.url,
-    locale: "en_GB",
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
+  publisher: site.name,
+  formatDetection: { telephone: false, email: false, address: false },
+  // Search Console / Bing verification: set these env vars at build time.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+      : undefined,
   },
-  twitter: { card: "summary_large_image", site: site.socialHandle },
+  // Fallback share tags only; each page supplies its own canonical, Open Graph
+  // and Twitter set via pageMeta() in lib/seo.ts.
+  openGraph: rootShare.openGraph,
+  twitter: rootShare.twitter,
 };
 
 export const viewport: Viewport = {
@@ -76,6 +86,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="flex min-h-dvh flex-col bg-canvas text-fg">
+        <JsonLd data={organizationLd()} />
         <a href="#main" className="skip-link">
           Skip to content
         </a>

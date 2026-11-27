@@ -74,16 +74,24 @@ function image(entry: RawEntry, src: string, alt: string): CmsImage {
   const fsPath = url.startsWith("/cms/")
     ? path.join(CONTENT, url.slice(5))
     : path.join(process.cwd(), "public", url);
-  let width = 1600;
-  let height = 1000;
+  const where = path.relative(process.cwd(), entry.file);
+  if (!existsSync(fsPath)) throw new Error(`[cms] Image not found for ${where}: ${src}`);
+  let dim: { width?: number; height?: number };
   try {
-    const dim = imageSize(readFileSync(fsPath));
-    width = dim.width ?? width;
-    height = dim.height ?? height;
-  } catch {
-    throw new Error(`[cms] Image not found for ${path.relative(process.cwd(), entry.file)}: ${src}`);
+    dim = imageSize(readFileSync(fsPath));
+  } catch (err) {
+    throw new Error(`[cms] Unreadable image for ${where}: ${src} (${(err as Error).message})`);
   }
-  return { src: url, width, height, alt };
+  if (!dim.width || !dim.height) throw new Error(`[cms] Could not read dimensions of ${src} in ${where}`);
+  return { src: url, width: dim.width, height: dim.height, alt };
+}
+
+
+/** Fail the build when a referenced local file doesn't exist. */
+function assertAsset(where: string, url: string) {
+  if (/^(https?:)?\/\//.test(url)) return;
+  const fsPath = url.startsWith("/cms/") ? path.join(CONTENT, url.slice(5)) : path.join(process.cwd(), "public", url);
+  if (!existsSync(fsPath)) throw new Error(`[cms] File not found for ${where}: ${url}`);
 }
 
 /* ----------------------------- Services ----------------------------- */
@@ -99,7 +107,8 @@ export const getServices = cache((): Service[] =>
   readCollection("services")
     .map((e) => {
       const d = parse(serviceSchema, e);
-      return { ...d, slug: e.slug, href: `/services/${e.slug}/`, cover: image(e, d.cover, d.coverAlt), body: e.body };
+      const cover = image(e, d.cover, d.coverAlt);
+      return { ...d, slug: e.slug, href: `/services/${e.slug}/`, cover, body: e.body };
     })
     .filter((s) => SHOW_DRAFTS || !s.draft)
     .sort((a, b) => a.order - b.order),
@@ -148,11 +157,12 @@ export const getPosts = cache((): Post[] =>
   readCollection("blog")
     .map((e) => {
       const d = parse(postSchema, e);
+      const cover = image(e, d.cover, d.coverAlt);
       return {
         ...d,
         slug: e.slug,
         href: `/blog/${e.slug}/`,
-        cover: image(e, d.cover, d.coverAlt),
+        cover,
         author: getAuthor(d.author),
         readingMinutes: Math.max(1, Math.round(readingTime(e.body).minutes)),
         categorySlug: slugify(d.category),
@@ -210,7 +220,12 @@ export type Testimonial = z.infer<typeof testimonialSchema> & { slug: string };
 
 export const getTestimonials = cache((): Testimonial[] =>
   readCollection("testimonials")
-    .map((e) => ({ ...parse(testimonialSchema, e), slug: e.slug }))
+    .map((e) => {
+      const d = parse(testimonialSchema, e);
+      const avatar = d.avatar ? assetUrl(e, d.avatar) : undefined;
+      if (avatar) assertAsset(path.relative(process.cwd(), e.file), avatar);
+      return { ...d, avatar, slug: e.slug };
+    })
     .sort((a, b) => a.order - b.order),
 );
 
@@ -230,7 +245,11 @@ export const getClients = cache((): Client[] => {
   const raw = JSON.parse(readFileSync(file, "utf8")) as unknown[];
   return raw.map((c, i) => {
     const r = clientSchema.safeParse(c);
-    if (!r.success) throw new Error(`[cms] Invalid client #${i} in content/clients.json`);
+    if (!r.success) {
+      const issues = r.error.issues.map((x) => `${x.path.join(".")}: ${x.message}`).join("; ");
+      throw new Error(`[cms] Invalid client #${i} in content/clients.json (${issues})`);
+    }
+    assertAsset(`content/clients.json (${r.data.name})`, r.data.logo);
     return r.data;
   });
 });

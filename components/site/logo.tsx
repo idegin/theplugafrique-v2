@@ -10,6 +10,7 @@ export function Logo({ tone = "dark", className, priority }: { tone?: "dark" | "
       width={359}
       height={202}
       priority={priority}
+      unoptimized
       className={cn("h-auto w-[4.5rem] md:w-20", className)}
     />
   );

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { site } from "@/lib/site";
 import { PageHero } from "@/components/site/page-hero";
@@ -9,11 +10,12 @@ import { NextSteps } from "@/components/site/next-steps";
 import { Offices } from "@/components/about/offices";
 import { InstagramIcon, LinkedinIcon, XIcon } from "@/components/ui/social-icons";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Contact",
-  description: "Talk to The Plug Afrique. Offices in Lagos and Abuja.",
-  alternates: { canonical: "/contact/" },
-};
+  description: "Talk to The Plug Afrique about strategy, innovation, capability, culture or partnerships. Offices in Lagos and Abuja.",
+  path: "/contact/",
+  og: "contact",
+});
 
 export default function ContactPage() {
   return (

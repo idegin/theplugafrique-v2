@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { getCategories, getPosts } from "@/lib/cms";
@@ -11,11 +12,13 @@ import { Reveal } from "@/components/motion/reveal";
 import { TopicsBand } from "@/components/blog/topics-band";
 import { NewsletterBand } from "@/components/blog/newsletter-band";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Insights",
   description: "Perspectives from The Plug Afrique on strategy, innovation, culture and partnership across Africa.",
-  alternates: { canonical: "/blog/", types: { "application/rss+xml": "/rss.xml" } },
-};
+  path: "/blog/",
+  og: "blog",
+  feeds: { "application/rss+xml": "/rss.xml" },
+});
 
 export default function BlogIndex() {
   const posts = getPosts();

@@ -1,0 +1,14 @@
+# Netlify / Cloudflare Pages redirects (copied to out/_redirects at build).
+# For Vercel, mirror these in vercel.json "redirects".
+# Before launch, add 301s for any v1 blog/service URLs that Google has indexed
+# (Search Console → Pages) whose slug changed in v2.
+
+# v1 page routes
+/about-us        /about/       301
+/about-us/       /about/       301
+/contact-us      /contact/     301
+/contact-us/     /contact/     301
+
+# Old feed / index paths
+/feed            /rss.xml      301
+/blog/index.html /blog/        301

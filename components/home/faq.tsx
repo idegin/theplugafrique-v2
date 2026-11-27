@@ -7,12 +7,16 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { ButtonLink } from "@/components/ui/button";
 import { Accordion } from "./accordion";
 import { FloatGraphic } from "@/components/motion/float-graphic";
+import { JsonLd } from "@/components/site/json-ld";
+import { faqLd } from "@/lib/seo";
 
-/** 10 · FAQ: sticky intro + contact card, accordion on the right. */
-export function Faq() {
+/** 10 · FAQ: sticky intro + contact card, accordion on the right.
+ *  `structuredData` emits FAQPage JSON-LD; enable it on one page only (home). */
+export function Faq({ structuredData = false }: { structuredData?: boolean }) {
   const faqs = getFaqs();
   return (
     <section aria-labelledby="faq-title" className="relative overflow-hidden bg-surface-muted py-section">
+      {structuredData && <JsonLd data={faqLd(faqs)} />}
       <FloatGraphic shape="orbit" node="var(--color-gold-500)" className="bottom-8 -left-10 hidden h-48 w-64 text-navy-300 lg:block" speed={0.2} />
       <div className="container-page grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">

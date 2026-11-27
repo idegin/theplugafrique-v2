@@ -17,6 +17,7 @@ export function ClientMarquee() {
                 alt={c.name}
                 width={300}
                 height={100}
+                unoptimized
                 className="h-9 w-auto max-w-[10rem] object-contain opacity-55 transition-opacity duration-300 hover:opacity-100 md:h-11"
               />
             );

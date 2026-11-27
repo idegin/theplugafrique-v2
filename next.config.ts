@@ -5,9 +5,14 @@ const nextConfig: NextConfig = {
   output: "export",
   // Emit `about/index.html` style paths so any static host serves clean URLs.
   trailingSlash: true,
-  // The image optimizer needs a server; static export serves images as-is.
+  // No image optimizer server in a static export. Instead the build script
+  // (scripts/sync-cms-assets.mjs) pre-renders WebP variants and this loader
+  // points each srcset width at one. deviceSizes must match its WIDTHS.
   images: {
-    unoptimized: true,
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
+    deviceSizes: [640, 1280, 1920],
+    imageSizes: [96, 256, 384],
   },
   experimental: {
     agentFeedback: true,
