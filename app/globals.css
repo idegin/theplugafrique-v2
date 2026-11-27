@@ -1,0 +1,909 @@
+/* ==========================================================================
+   The Plug Afrique: design tokens and base styles (Tailwind CSS v4)
+   Spec: /DESIGN.md. Keep this file and DESIGN.md in sync.
+   ========================================================================== */
+
+@import "tailwindcss";
+
+/* Dark "chapters": wrap a section in .on-dark (or data-surface="dark").
+   Semantic tokens flip automatically; the `on-dark:` variant targets them. */
+@custom-variant on-dark (&:where(.on-dark, .on-dark *, [data-surface="dark"], [data-surface="dark"] *));
+/* Only when the user has NOT asked for reduced motion */
+@custom-variant motion-ok (@media (prefers-reduced-motion: no-preference));
+/* Fine pointer devices only (hover effects, custom cursor) */
+@custom-variant pointer-fine (@media (hover: hover) and (pointer: fine));
+
+/* --------------------------------------------------------------------------
+   1. Static theme tokens
+   -------------------------------------------------------------------------- */
+@theme {
+  /* Remove Tailwind's default palette: only brand colours exist. */
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Sapphire Navy, anchored on the logo #002055 (= 900) */
+  --color-navy-50: #f2f7ff;
+  --color-navy-100: #e3eefe;
+  --color-navy-200: #c7dcfe;
+  --color-navy-300: #a2c2f5;
+  --color-navy-400: #79a2e4;
+  --color-navy-500: #5583cc;
+  --color-navy-600: #3967b2;
+  --color-navy-700: #224d92;
+  --color-navy-800: #113875;
+  --color-navy-900: #002055;
+  --color-navy-950: #001135;
+
+  /* Afrique Gold, anchored on #F2CB7A (= 300) */
+  --color-gold-50: #fdf8ec;
+  --color-gold-100: #fbf0d6;
+  --color-gold-200: #f7e2b0;
+  --color-gold-300: #f2cb7a;
+  --color-gold-400: #e5b356;
+  --color-gold-500: #cf9838;
+  --color-gold-600: #ad7a26;
+  --color-gold-700: #8a5e1d;
+  --color-gold-800: #6c4919;
+  --color-gold-900: #4f3514;
+  --color-gold-950: #2e1e0a;
+
+  /* Ivory: warm paper neutral (backgrounds, warm borders) */
+  --color-ivory-50: #fdfaf4;
+  --color-ivory-100: #f7f2e8;
+  --color-ivory-200: #ece6d8;
+  --color-ivory-300: #d8d0c0;
+  --color-ivory-400: #b2aa9a;
+  --color-ivory-500: #8c8577;
+  --color-ivory-600: #6e685c;
+  --color-ivory-700: #544f45;
+  --color-ivory-800: #3e3a31;
+  --color-ivory-900: #2a261f;
+  --color-ivory-950: #16130e;
+
+  /* Ink: navy-tinted cool neutral (text, UI greys) */
+  --color-ink-50: #f5f7f9;
+  --color-ink-100: #e8ebf1;
+  --color-ink-200: #d3d8e0;
+  --color-ink-300: #b7beca;
+  --color-ink-400: #9199a6;
+  --color-ink-500: #6c7584;
+  --color-ink-600: #525b6c;
+  --color-ink-700: #3b4558;
+  --color-ink-800: #263043;
+  --color-ink-900: #131d2f;
+  --color-ink-950: #050d1e;
+
+  /* Clay: terracotta earth accent (use ≤3%) */
+  --color-clay-50: #fef4f1;
+  --color-clay-100: #fee7df;
+  --color-clay-200: #fdcfbe;
+  --color-clay-300: #f2ad94;
+  --color-clay-400: #dd8565;
+  --color-clay-500: #c2603b;
+  --color-clay-600: #a84319;
+  --color-clay-700: #8b2f02;
+  --color-clay-800: #6e2401;
+  --color-clay-900: #4e1701;
+  --color-clay-950: #2f0b00;
+
+  /* Sage: baobab green (success) */
+  --color-sage-50: #f1f9f5;
+  --color-sage-100: #e3f1e9;
+  --color-sage-200: #c9e2d4;
+  --color-sage-300: #a5ccb7;
+  --color-sage-400: #7eb196;
+  --color-sage-500: #5a9678;
+  --color-sage-600: #3e7d5f;
+  --color-sage-700: #276348;
+  --color-sage-800: #154d35;
+  --color-sage-900: #023521;
+  --color-sage-950: #001f11;
+
+  /* Ember (danger) */
+  --color-ember-50: #fff4f2;
+  --color-ember-100: #fee7e3;
+  --color-ember-200: #ffcdc6;
+  --color-ember-300: #ffa699;
+  --color-ember-400: #f57c6e;
+  --color-ember-500: #e05749;
+  --color-ember-600: #c8372d;
+  --color-ember-700: #a41914;
+  --color-ember-800: #820104;
+  --color-ember-900: #580001;
+  --color-ember-950: #360000;
+
+  /* ---- Typography: fluid scale, 360px → 1440px ---- */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-xs--letter-spacing: 0.01em;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.55;
+  --text-sm--letter-spacing: 0.005em;
+  --text-base: clamp(1rem, 0.9792rem + 0.0926vw, 1.0625rem);
+  --text-base--line-height: 1.65;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.6;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.5;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.35;
+
+  --text-lead: clamp(1.125rem, 1.0417rem + 0.3704vw, 1.375rem);
+  --text-lead--line-height: 1.55;
+
+  --text-heading-md: clamp(1.1875rem, 1.125rem + 0.2778vw, 1.375rem);
+  --text-heading-md--line-height: 1.3;
+  --text-heading-md--letter-spacing: -0.005em;
+  --text-heading-md--font-weight: 600;
+  --text-heading-lg: clamp(1.375rem, 1.25rem + 0.5556vw, 1.75rem);
+  --text-heading-lg--line-height: 1.2;
+  --text-heading-lg--letter-spacing: -0.01em;
+  --text-heading-lg--font-weight: 500;
+
+  --text-display-sm: clamp(1.625rem, 1.4167rem + 0.9259vw, 2.25rem);
+  --text-display-sm--line-height: 1.12;
+  --text-display-sm--letter-spacing: -0.015em;
+  --text-display-sm--font-weight: 450;
+  --text-display-md: clamp(2rem, 1.5rem + 2.2222vw, 3.5rem);
+  --text-display-md--line-height: 1.05;
+  --text-display-md--letter-spacing: -0.02em;
+  --text-display-md--font-weight: 400;
+  --text-display-lg: clamp(2.5rem, 1.75rem + 3.3333vw, 4.75rem);
+  --text-display-lg--line-height: 1;
+  --text-display-lg--letter-spacing: -0.025em;
+  --text-display-lg--font-weight: 400;
+  --text-display-xl: clamp(3rem, 1.8333rem + 5.1852vw, 6.5rem);
+  --text-display-xl--line-height: 0.95;
+  --text-display-xl--letter-spacing: -0.03em;
+  --text-display-xl--font-weight: 350;
+  --text-display-2xl: clamp(3.5rem, 1.6667rem + 8.1481vw, 9rem);
+  --text-display-2xl--line-height: 0.92;
+  --text-display-2xl--letter-spacing: -0.035em;
+  --text-display-2xl--font-weight: 350;
+
+  --text-eyebrow: clamp(0.75rem, 0.7292rem + 0.0926vw, 0.8125rem);
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.18em;
+  --text-eyebrow--font-weight: 500;
+  --text-stat: clamp(3rem, 2.1667rem + 3.7037vw, 5.5rem);
+  --text-stat--line-height: 1;
+  --text-stat--letter-spacing: -0.04em;
+  --text-stat--font-weight: 300;
+
+  --font-weight-light: 300;
+  --font-weight-book: 350;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --tracking-tightest: -0.04em;
+  --tracking-tighter: -0.03em;
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.02em;
+  --tracking-wider: 0.06em;
+  --tracking-eyebrow: 0.18em;
+
+  --leading-none: 1;
+  --leading-display: 0.95;
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.7;
+
+  /* ---- Layout ---- */
+  --breakpoint-3xl: 120rem;
+  --container-prose: 68ch;
+  --container-reading: 44rem;
+  --container-page: 88rem;
+  --container-bleed: 110rem;
+  --spacing-gutter: clamp(1.25rem, 0.5rem + 3.3333vw, 3.5rem);
+  --spacing-section: clamp(5rem, 3.3333rem + 7.4074vw, 10rem);
+  --spacing-section-sm: clamp(3.5rem, 2.6667rem + 3.7037vw, 6rem);
+  --spacing-header: 5rem;
+  --spacing-header-sm: 4rem;
+
+  /* ---- Shape ---- */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-pill: 999px;
+
+  /* ---- Depth: navy-tinted, layered shadows ---- */
+  --shadow-xs: 0 1px 2px rgb(0 17 53 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(0 17 53 / 0.05), 0 2px 6px -1px rgb(0 17 53 / 0.06);
+  --shadow-md: 0 2px 4px -1px rgb(0 17 53 / 0.05), 0 8px 20px -4px rgb(0 17 53 / 0.08);
+  --shadow-lg: 0 4px 8px -2px rgb(0 17 53 / 0.05), 0 18px 40px -8px rgb(0 17 53 / 0.14);
+  --shadow-xl: 0 8px 16px -4px rgb(0 17 53 / 0.06), 0 32px 64px -12px rgb(0 17 53 / 0.22);
+  --shadow-glow-gold: 0 0 0 1px rgb(242 203 122 / 0.35), 0 8px 32px -6px rgb(242 203 122 / 0.35);
+  --shadow-inner-line: inset 0 0 0 1px rgb(0 17 53 / 0.06);
+  --drop-shadow-soft: 0 10px 24px rgb(0 17 53 / 0.18);
+
+  /* ---- Motion ---- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-quart: cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-marquee-reverse: marquee var(--marquee-duration, 40s) linear infinite reverse;
+  --animate-fade-up: fade-up 0.7s var(--ease-out-expo) both;
+  --animate-fade-in: fade-in 0.45s var(--ease-out-quart) both;
+  --animate-mask-up: mask-up 1s var(--ease-out-expo) both;
+  --animate-blur-in: blur-in 0.8s var(--ease-out-expo) both;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+  --animate-ping-soft: ping-soft 2.4s var(--ease-out-quart) infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-spin-slow: spin 24s linear infinite;
+  --animate-ken-burns: ken-burns 20s ease-out both;
+  --animate-shake: shake 0.42s var(--ease-out-quart);
+  --animate-aurora: aurora 18s ease-in-out infinite alternate;
+
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(calc(-100% - var(--marquee-gap, 3rem)), 0, 0); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translate3d(0, 1.25rem, 0); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes mask-up {
+    from { transform: translate3d(0, 105%, 0); }
+    to { transform: none; }
+  }
+  @keyframes blur-in {
+    from { opacity: 0; filter: blur(12px); }
+    to { opacity: 1; filter: blur(0); }
+  }
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+  @keyframes ping-soft {
+    0% { transform: scale(1); opacity: 0.55; }
+    80%, 100% { transform: scale(2.4); opacity: 0; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -10px, 0); }
+  }
+  @keyframes ken-burns {
+    from { transform: scale(1.08) translate3d(1%, 1%, 0); }
+    to { transform: scale(1) translate3d(0, 0, 0); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(2px); }
+  }
+  @keyframes aurora {
+    0% { transform: translate3d(-4%, -2%, 0) scale(1); }
+    100% { transform: translate3d(4%, 3%, 0) scale(1.08); }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Theme tokens that reference runtime CSS variables
+      (next/font variables + semantic surface tokens)
+   -------------------------------------------------------------------------- */
+@theme inline {
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-raised: var(--surface-raised);
+  --color-inverse: var(--inverse);
+  --color-on-inverse: var(--on-inverse);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-heading: var(--heading);
+  --color-accent: var(--accent);
+  --color-accent-fill: var(--accent-fill);
+  --color-on-accent: var(--on-accent);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-focus: var(--focus);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+}
+
+/* Semantic values: light (default, ivory paper) */
+:root {
+  --canvas: var(--color-ivory-50);
+  --surface: var(--color-white);
+  --surface-muted: var(--color-ivory-100);
+  --surface-raised: var(--color-white);
+  --inverse: var(--color-navy-900);
+  --on-inverse: var(--color-ivory-50);
+  --fg: var(--color-ink-900);
+  --fg-muted: var(--color-ink-600);
+  --fg-subtle: var(--color-ink-500);
+  --heading: var(--color-navy-900);
+  --accent: var(--color-gold-700);
+  --accent-fill: var(--color-gold-300);
+  --on-accent: var(--color-navy-950);
+  --primary: var(--color-navy-900);
+  --primary-hover: var(--color-navy-800);
+  --on-primary: var(--color-ivory-50);
+  --line: var(--color-ivory-200);
+  --line-strong: var(--color-ivory-300);
+  --focus: var(--color-gold-600);
+  --success: var(--color-sage-700);
+  --warning: var(--color-gold-800);
+  --danger: var(--color-ember-600);
+  --info: var(--color-navy-600);
+
+  /* Fraunces variable axes (animatable) */
+  --fraunces-soft: 50;
+  --fraunces-wonk: 0;
+
+  color-scheme: light;
+}
+
+/* Semantic values: dark chapters (navy) */
+.on-dark,
+[data-surface="dark"] {
+  --canvas: var(--color-navy-950);
+  --surface: var(--color-navy-900);
+  --surface-muted: var(--color-navy-800);
+  --surface-raised: var(--color-navy-800);
+  --inverse: var(--color-ivory-50);
+  --on-inverse: var(--color-navy-950);
+  --fg: var(--color-ivory-50);
+  --fg-muted: var(--color-ivory-300);
+  --fg-subtle: var(--color-navy-300);
+  --heading: var(--color-ivory-50);
+  --accent: var(--color-gold-300);
+  --accent-fill: var(--color-gold-300);
+  --on-accent: var(--color-navy-950);
+  --primary: var(--color-gold-300);
+  --primary-hover: var(--color-gold-200);
+  --on-primary: var(--color-navy-950);
+  --line: rgb(255 255 255 / 0.12);
+  --line-strong: rgb(255 255 255 / 0.24);
+  --focus: var(--color-gold-300);
+  --success: var(--color-sage-300);
+  --warning: var(--color-gold-300);
+  --danger: var(--color-ember-300);
+  --info: var(--color-navy-300);
+
+  color-scheme: dark;
+  color: var(--fg);
+}
+
+/* --------------------------------------------------------------------------
+   3. Base
+   -------------------------------------------------------------------------- */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-padding-top: calc(var(--spacing-header) + 1rem);
+    background-color: var(--canvas);
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--canvas);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--heading);
+    text-wrap: balance;
+  }
+
+  h1, h2, .font-display {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" var(--fraunces-soft), "WONK" var(--fraunces-wonk);
+    font-optical-sizing: auto;
+  }
+
+  p, li, figcaption, blockquote {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img, video, svg, canvas {
+    display: block;
+    max-width: 100%;
+  }
+
+  img, video {
+    height: auto;
+  }
+
+  ::selection {
+    background-color: var(--color-gold-300);
+    color: var(--color-navy-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  hr {
+    border-color: var(--line);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  /* Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ivory-400) transparent;
+  }
+  .on-dark * {
+    scrollbar-color: var(--color-navy-700) transparent;
+  }
+
+  /* Lenis smooth scroll (https://github.com/darkroomengineering/lenis) */
+  html.lenis, html.lenis body { height: auto; }
+  .lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+  .lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-smooth iframe { pointer-events: none; }
+
+  /* Reduced motion: kill non-essential movement globally */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Utilities
+   -------------------------------------------------------------------------- */
+
+/* Page container with fluid gutters */
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+@utility container-bleed {
+  width: 100%;
+  max-width: var(--container-bleed);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+@utility container-reading {
+  width: 100%;
+  max-width: var(--container-reading);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Mono uppercase section label */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--tracking-eyebrow);
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+/* Eyebrow with leading gold hairline */
+@utility eyebrow-rule {
+  &::before {
+    content: "";
+    width: 1.5rem;
+    height: 1px;
+    background-color: var(--accent-fill);
+    flex: none;
+  }
+}
+
+/* Signature italic accent word inside display headings */
+@utility em-accent {
+  font-style: italic;
+  color: var(--accent);
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+}
+
+/* Gold gradient text: one word on dark sections */
+@utility text-gradient-gold {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold-200) 0%,
+    var(--color-gold-300) 40%,
+    var(--color-gold-500) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Underline that grows from the left on hover/focus */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--duration-base, 280ms) var(--ease-out-quart);
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/* Gold marker highlight behind a phrase */
+@utility marker-gold {
+  background-image: linear-gradient(
+    transparent 62%,
+    color-mix(in oklab, var(--color-gold-300) 55%, transparent) 62%
+  );
+  background-repeat: no-repeat;
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+}
+
+/* Film grain overlay (place on a relatively-positioned element) */
+@utility bg-grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: var(--grain-opacity, 0.08);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-size: 220px 220px;
+  }
+}
+
+/* Navy aurora / mesh atmosphere for dark chapters */
+@utility bg-aurora-navy {
+  background-color: var(--color-navy-950);
+  background-image:
+    radial-gradient(60% 55% at 15% 10%, color-mix(in oklab, var(--color-navy-700) 70%, transparent) 0%, transparent 70%),
+    radial-gradient(50% 50% at 85% 25%, color-mix(in oklab, var(--color-navy-800) 85%, transparent) 0%, transparent 70%),
+    radial-gradient(40% 45% at 70% 95%, color-mix(in oklab, var(--color-gold-500) 9%, transparent) 0%, transparent 70%),
+    linear-gradient(180deg, var(--color-navy-900) 0%, var(--color-navy-950) 100%);
+}
+
+/* Hairline "connection grid" patterns */
+@utility bg-dot-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    color-mix(in oklab, currentColor 18%, transparent) 1px,
+    transparent 0
+  );
+  background-size: var(--grid-size, 28px) var(--grid-size, 28px);
+}
+@utility bg-line-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: var(--grid-size, 72px) var(--grid-size, 72px);
+}
+
+/* Navy duotone image treatment */
+@utility duotone-navy {
+  filter: grayscale(1) contrast(1.05) brightness(1.02);
+  mix-blend-mode: luminosity;
+}
+
+/* Arch-topped portrait frame */
+/* Proportional radii (tuned for 4/5 frames): a 999px value would force the
+   browser to scale every corner down and flatten the bottom radii. */
+@utility rounded-arch {
+  border-radius: 50% 50% var(--radius-lg) var(--radius-lg) / 40% 40% var(--radius-lg) var(--radius-lg);
+}
+
+/* Fade edges horizontally (marquees, carousels) */
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+@utility mask-fade-b {
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+}
+
+/* Line-mask wrapper for split-text reveals */
+@utility line-mask {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* Skeleton shimmer */
+@utility skeleton {
+  background-color: var(--surface-muted);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--color-white) 55%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: var(--radius-sm);
+}
+
+/* Hide visually, keep for screen readers */
+@utility visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Fraunces axis helpers */
+@utility font-soft {
+  --fraunces-soft: 100;
+}
+@utility font-sharp {
+  --fraunces-soft: 0;
+}
+@utility font-wonk {
+  --fraunces-wonk: 1;
+}
+
+/* --------------------------------------------------------------------------
+   5. Motion durations as CSS variables (mirrored in lib/motion.ts)
+   -------------------------------------------------------------------------- */
+:root {
+  --duration-instant: 100ms;
+  --duration-fast: 180ms;
+  --duration-base: 280ms;
+  --duration-slow: 450ms;
+  --duration-slower: 700ms;
+  --duration-cinematic: 1200ms;
+}
+
+/* --------------------------------------------------------------------------
+   6. Components
+   -------------------------------------------------------------------------- */
+@layer components {
+  /* Skip link */
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-navy-900);
+    color: var(--color-ivory-50);
+    font-weight: 500;
+    transform: translateY(-200%);
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+  .skip-link:focus-visible {
+    transform: none;
+  }
+
+  /* Long-form Markdown content from the CMS */
+  .prose-tpa {
+    max-width: var(--container-prose);
+    color: var(--fg);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    font-variant-numeric: oldstyle-nums;
+
+    & > * + * { margin-top: 1.25em; }
+    & h2 {
+      font-family: var(--font-display);
+      font-size: var(--text-display-sm);
+      line-height: var(--text-display-sm--line-height);
+      letter-spacing: var(--text-display-sm--letter-spacing);
+      font-weight: 450;
+      margin-top: 2.2em;
+    }
+    & h3 {
+      font-size: var(--text-heading-lg);
+      line-height: var(--text-heading-lg--line-height);
+      font-weight: 600;
+      margin-top: 1.8em;
+    }
+    & h4 {
+      font-size: var(--text-heading-md);
+      font-weight: 600;
+      margin-top: 1.6em;
+    }
+    & h2 + *, & h3 + *, & h4 + * { margin-top: 0.6em; }
+    & a {
+      color: var(--heading);
+      text-decoration: underline;
+      text-decoration-color: var(--accent-fill);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+      transition: text-decoration-color var(--duration-fast) var(--ease-out-quart);
+    }
+    & a:hover { text-decoration-color: currentColor; }
+    & strong { color: var(--heading); font-weight: 600; }
+    & ul, & ol { padding-left: 1.25em; }
+    & ul { list-style: none; }
+    & ul > li { position: relative; }
+    & ul > li::before {
+      content: "";
+      position: absolute;
+      left: -1.1em;
+      top: 0.72em;
+      width: 0.45em;
+      height: 1px;
+      background: var(--accent-fill);
+    }
+    & ol { list-style: decimal; }
+    & ol > li::marker { font-family: var(--font-mono); font-size: 0.85em; color: var(--fg-muted); }
+    & li + li { margin-top: 0.5em; }
+    & blockquote {
+      border-left: 2px solid var(--accent-fill);
+      padding: 0.25em 0 0.25em 1.25em;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.35em;
+      line-height: 1.45;
+      color: var(--heading);
+    }
+    & hr { margin-block: 3em; border-top: 1px solid var(--line); }
+    & img, & video { border-radius: var(--radius-lg); width: 100%; }
+    & figure figcaption {
+      margin-top: 0.75em;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.04em;
+      color: var(--fg-muted);
+    }
+    & code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: var(--surface-muted);
+      padding: 0.15em 0.4em;
+      border-radius: var(--radius-xs);
+    }
+    & pre {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.7;
+      background: var(--color-navy-950);
+      color: var(--color-ivory-100);
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+    }
+    & pre code { background: none; padding: 0; }
+    & table { width: 100%; border-collapse: collapse; font-size: 0.95em; font-variant-numeric: tabular-nums; }
+    & th {
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      font-weight: 500;
+    }
+    & th, & td { padding: 0.75em 1em 0.75em 0; border-bottom: 1px solid var(--line); }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Motion initial states (only when JS runs AND motion is allowed, so
+      content is always visible without JS or with reduced motion)
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] { opacity: 0; }
+  .js [data-split] { visibility: hidden; }
+  .js [data-clip] { clip-path: inset(0 0 100% 0); }
+}
+
+/* --------------------------------------------------------------------------
+   8. Shared component styles
+   -------------------------------------------------------------------------- */
+@layer components {
+  /* Letter-roll label: the label slides up and is replaced by a copy */
+  .roll {
+    position: relative;
+    display: inline-flex;
+    overflow: hidden;
+    line-height: 1.25;
+  }
+  .roll > span {
+    display: block;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+  .roll > span + span {
+    position: absolute;
+    inset: 0;
+    transform: translateY(105%);
+  }
+  :is(a, button):hover .roll > span:first-child,
+  :is(a, button):focus-visible .roll > span:first-child {
+    transform: translateY(-105%);
+  }
+  :is(a, button):hover .roll > span + span,
+  :is(a, button):focus-visible .roll > span + span {
+    transform: none;
+  }
+
+  .heading-anchor {
+    margin-left: 0.35em;
+    color: var(--accent);
+    opacity: 0;
+    font-weight: 400;
+    text-decoration: none !important;
+    transition: opacity var(--duration-fast);
+  }
+  .prose-tpa :is(h2, h3):hover .heading-anchor { opacity: 1; }
+
+  /* Outline text (footer wordmark, decorative numbers) */
+  .text-outline {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px currentColor;
+  }
+}
+
+@keyframes scroll-cue {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+@keyframes progress-fill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/* Preloader: skipped on repeat visits and under reduced motion */
+.no-preload #preloader { display: none; }
+@media (prefers-reduced-motion: reduce) { #preloader { display: none; } }
+
+/* SplitText line masks: room for descenders and italic overhang */
+.split-line-mask {
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+  padding-inline-end: 0.08em;
+  margin-inline-end: -0.08em;
+}
